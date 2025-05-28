@@ -1,0 +1,7 @@
+cssselect
+lxml
+pyquery
+requests
+schedule
+dotenv
+json_repair
