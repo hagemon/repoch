@@ -44,10 +44,10 @@ class TestWikiParser(unittest.TestCase):
             saved_content = f.read()
             self.assertEqual(markdown_content, saved_content)
 
-    # def tearDown(self):
-    #     # 清理测试文件
-    #     if os.path.exists(self.output_file):
-    #         os.remove(self.output_file)
+    def tearDown(self):
+        # 清理测试文件
+        if os.path.exists(self.output_file):
+            os.remove(self.output_file)
 
 
 if __name__ == "__main__":

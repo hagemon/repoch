@@ -118,6 +118,9 @@ def get_wiki(language, date):
         with open(os.path.join(wiki_path, f"{repo_name}.md"), "w", encoding="utf-8") as f:
             f.write(markdown)
     return repos
-        
+
+
+def summarize_wiki():
+    pass
         
 

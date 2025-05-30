@@ -191,7 +191,7 @@ def get_readme(repo_name):
     return introduction
 
 
-def start_scrape():
+def start_scrape(lans):
     strdate = datetime.datetime.now().strftime("%Y-%m-%d")
     last_week = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime(
         "%Y-%m-%d"
@@ -200,8 +200,7 @@ def start_scrape():
     # 创建以日期命名的目录
     _, trending_directory, rookies_directory = create_date_directory(strdate)
 
-    # lans = ["all", "python", "swift", "typescript", "javascript", "go", "rust"]
-    lans = ["all"]
+    
     for lan in tqdm(lans):
         # 为每种语言创建单独的 Markdown 文件
         # lang_filename = createMarkdown(strdate, lan, directory)
