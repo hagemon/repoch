@@ -1,6 +1,7 @@
 import os
 from llm.chat import chat
 from json_repair import json_repair
+import json
 
 FILTER_PROMPT = """我正在做一个每周开源资讯的播客，需要从一些热门项目中，挑选出一些值得详细介绍的项目，返回他们的URL链接。榜单分为总榜和新锐榜，要分别从中选取一些项目。
 
@@ -22,8 +23,11 @@ FILTER_PROMPT = """我正在做一个每周开源资讯的播客，需要从一�
 
 
 def filter_trending(language, date):
-    trending_dir = os.path.join(date, "trending")
-    rookie_dir = os.path.join(date, "rookies")
+    trending_dir = os.path.join("repos", date, "trending")
+    rookie_dir = os.path.join("repos", date, "rookies")
+    filtered_dir = os.path.join("repos", date, "filtered")
+    if not os.path.exists(filtered_dir):
+        os.makedirs(filtered_dir)
     with open(
         os.path.join(trending_dir, f"{language}.json"), "r", encoding="utf-8"
     ) as f:
@@ -33,6 +37,6 @@ def filter_trending(language, date):
     prompt = FILTER_PROMPT.format(trending=trending_list, rookie_list=rookie_list)
     filtered = chat(prompt)
     filtered = json_repair.loads(filtered)
-    with open(os.path.join(date, "filtered.json"), "w", encoding="utf-8") as f:
-        f.write(filtered)
+    with open(os.path.join(filtered_dir, f"{language}.json"), "w", encoding="utf-8") as f:
+        f.write(json.dumps(filtered))
     return filtered

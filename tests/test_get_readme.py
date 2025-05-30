@@ -5,7 +5,7 @@ import json
 
 # 添加父目录到路径，以便导入scraper模块
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from steps.scraper import get_readme
+from nodes.scraper import get_readme
 
 def test_get_readme():
     """测试get_readme函数能否正确获取README介绍内容"""
