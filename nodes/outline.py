@@ -17,9 +17,12 @@ OUTLINE_PROMPT = """我正在做一个每周开源资讯的播客，主要分为
 """
 
 
-def create_outline(language, date):
-    trending_dir = os.path.join(date, "trending")
-    rookie_dir = os.path.join(date, "rookies")
+def create_outline(language, date, overwrite=False):
+    trending_dir = os.path.join("repos", date, "trending")
+    rookie_dir = os.path.join("repos", date, "rookies")
+    outline_file = os.path.join("repos", date, "outline.md")
+    if not overwrite and os.path.exists(outline_file):
+        return
     with open(
         os.path.join(trending_dir, f"{language}.json"), "r", encoding="utf-8"
     ) as f:
@@ -28,9 +31,8 @@ def create_outline(language, date):
         rookie_list = f.readlines()
     prompt = OUTLINE_PROMPT.format(trending=trending_list, rookie_list=rookie_list)
     outline = chat(prompt)
-    with open(os.path.join(date, "outline.md"), "w", encoding="utf-8") as f:
+    with open(outline_file, "w", encoding="utf-8") as f:
         f.write(outline)
-    return outline
 
 
 if __name__ == "__main__":

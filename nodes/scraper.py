@@ -9,7 +9,8 @@ from dotenv import load_dotenv
 import re
 
 load_dotenv()
-REPO_DIR = 'repos'
+REPO_DIR = "repos"
+
 
 def create_date_directory(date):
     """创建以日期命名的目录"""
@@ -147,7 +148,9 @@ def get_readme(repo_name):
     try:
         content_response = requests.request("GET", readme_url, headers=headers)
     except Exception as e:
-        print(f"获取 README 内容失败: {e}\n 仓库名称: {repo_name} \n 仓库URL: {readme_url}")
+        print(
+            f"获取 README 内容失败: {e}\n 仓库名称: {repo_name} \n 仓库URL: {readme_url}"
+        )
         return ""
     if content_response.status_code != 200:
         print(f"获取 README 内容失败: {content_response.status_code}")
@@ -191,7 +194,7 @@ def get_readme(repo_name):
     return introduction
 
 
-def start_scrape(lans):
+def start_scrape(lans, overwrite=False):
     strdate = datetime.datetime.now().strftime("%Y-%m-%d")
     last_week = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime(
         "%Y-%m-%d"
@@ -200,16 +203,21 @@ def start_scrape(lans):
     # 创建以日期命名的目录
     _, trending_directory, rookies_directory = create_date_directory(strdate)
 
-    
     for lan in tqdm(lans):
         # 为每种语言创建单独的 Markdown 文件
         # lang_filename = createMarkdown(strdate, lan, directory)
         json_filename = createJson(lan, trending_directory)
-        scrape_trending(lan, json_filename)
+        if overwrite or not os.path.exists(json_filename):
+            scrape_trending(lan, json_filename)
+        else:
+            print(f"{json_filename} already exists")
 
         # 为新兴项目创建json文件
         rookies_json_filename = createJson(lan, rookies_directory)
-        scrape_rookie_trending(lan, rookies_json_filename, last_week)
+        if overwrite or not os.path.exists(rookies_json_filename):
+            scrape_rookie_trending(lan, rookies_json_filename, last_week)
+        else:
+            print(f"{rookies_json_filename} already exists")
 
     return strdate
 
