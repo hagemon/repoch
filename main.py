@@ -10,8 +10,8 @@ def main():
     # Workflow
     # lans = ["all", "python", "swift", "typescript", "javascript", "go", "rust"]
     lans = ["all"]
-    date = datetime.datetime.now().strftime("%Y-%m-%d")
-    # date = "2025-06-01"
+    # date = datetime.datetime.now().strftime("%Y-%m-%d")
+    date = "2025-06-01"
     print("start scraping...")
     start_scrape(lans, date)
     print("create outline...")

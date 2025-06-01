@@ -9,13 +9,17 @@ ENDING = "# 结束\n\n感谢各位的聆听，如果需要详细了解项目细�
 def conclude(language, date):
     outline_path = os.path.join("repos", date, "outline", f"{language}.md")
     summary_path = os.path.join("repos", date, "summary", language)
-    conclude_path = os.path.join("repos", date, "conclude", f"{language}.md")
+    conclude_path = os.path.join("repos", date, "conclude")
+    if not os.path.exists(conclude_path):
+        os.makedirs(conclude_path)
     with open(outline_path, "r", encoding="utf-8") as f:
         outline = f.read()
-    outline += "\n\n 接下来介绍本周精选开源项目\n\n"
+    outline += "接下来介绍本周精选开源项目\n\n"
     for file_name in os.listdir(summary_path):
         with open(os.path.join(summary_path, file_name), "r", encoding="utf-8") as f:
             summary = f.read()
         outline = outline + "\n\n" + summary
-    with open(conclude_path, "w", encoding="utf-8") as f:
-        f.write(OPENING + "\n\n" + outline + "\n\n" + ENDING)
+    with open(
+        os.path.join(conclude_path, f"{language}.md"), "w", encoding="utf-8"
+    ) as f:
+        f.write(OPENING + outline + "\n\n" + ENDING)

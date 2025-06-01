@@ -114,9 +114,12 @@ def fetch_and_parse_to_markdown(url):
     return markdown
 
 
-def get_wiki(language, date):
+def get_wiki(language, date, overwrite=False):
     filtered_path = os.path.join("repos", date, "filtered")
     wiki_path = os.path.join("repos", date, "wiki", language)
+    if not overwrite and os.path.exists(wiki_path):
+        print(f"{wiki_path} already exists")
+        return
     if not os.path.exists(wiki_path):
         os.makedirs(wiki_path)
     with open(
@@ -150,9 +153,12 @@ WIKI_SUMMARY_PROMPT = """
 """
 
 
-def summarize_wiki(language, date):
+def summarize_wiki(language, date, overwrite=False):
     wiki_path = os.path.join("repos", date, "wiki", language)
     summary_path = os.path.join("repos", date, "summary", language)
+    if not overwrite and os.path.exists(summary_path):
+        print(f"{summary_path} already exists")
+        return
     if not os.path.exists(summary_path):
         os.makedirs(summary_path)
     for file_name in os.listdir(wiki_path):
