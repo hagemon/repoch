@@ -74,6 +74,7 @@ def scrape_trending(language, filename):
             i = pq(item)
             title = i(".lh-condensed a").text().replace(" ", "")
             # owner = i(".lh-condensed span.text-normal").text()
+            lan = i("span[itemprop='programmingLanguage']").text()
             description = i("p.col-9").text()
             star = (
                 i(".d-inline-block.float-sm-right")
@@ -92,6 +93,7 @@ def scrape_trending(language, filename):
                     "description": description,
                     "star": int(star),
                     "url": url,
+                    "language": lan,
                     "introduction": introduction,
                 }
             )
@@ -122,6 +124,7 @@ def scrape_rookie_trending(language, filename, last_week):
             "description": item["description"],
             "url": item["html_url"],
             "star": item["stargazers_count"],
+            "language": item["language"],
             "introduction": introduction,
         }
         json_data.append(obj)
@@ -194,14 +197,13 @@ def get_readme(repo_name):
     return introduction
 
 
-def start_scrape(lans, overwrite=False):
-    strdate = datetime.datetime.now().strftime("%Y-%m-%d")
-    last_week = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime(
-        "%Y-%m-%d"
-    )
+def start_scrape(lans, date, overwrite=False):
+    last_week = (
+        datetime.datetime.strptime(date, "%Y-%m-%d") - datetime.timedelta(days=7)
+    ).strftime("%Y-%m-%d")
 
     # 创建以日期命名的目录
-    _, trending_directory, rookies_directory = create_date_directory(strdate)
+    _, trending_directory, rookies_directory = create_date_directory(date)
 
     for lan in tqdm(lans):
         # 为每种语言创建单独的 Markdown 文件
@@ -218,8 +220,6 @@ def start_scrape(lans, overwrite=False):
             scrape_rookie_trending(lan, rookies_json_filename, last_week)
         else:
             print(f"{rookies_json_filename} already exists")
-
-    return strdate
 
 
 if __name__ == "__main__":

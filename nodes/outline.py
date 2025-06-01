@@ -8,6 +8,8 @@ OUTLINE_PROMPT = """我正在做一个每周开源资讯的播客，主要分为
 2. 每个项目都可以或多或少介绍，尽量有趣，突出亮点，但不要太口语化，不要胡编乱造
 3. 对于重复的内容，放到新锐榜介绍
 4. 对于一些经典项目（比如vscode）可以少提，重点介绍新锐的项目
+5. 对于政治敏感、色情（jav）、暴力、宗教、种族歧视等项目，不要介绍
+6. 对于存在利用漏洞，绕过商业项目的限制，从而免费获取商业项目会员权限的项目，不要介绍
 
 # 总榜
 {trending}
@@ -20,7 +22,7 @@ OUTLINE_PROMPT = """我正在做一个每周开源资讯的播客，主要分为
 def create_outline(language, date, overwrite=False):
     trending_dir = os.path.join("repos", date, "trending")
     rookie_dir = os.path.join("repos", date, "rookies")
-    outline_file = os.path.join("repos", date, "outline.md")
+    outline_file = os.path.join("repos", date, "outline", f"{language}.md")
     if not overwrite and os.path.exists(outline_file):
         return
     with open(

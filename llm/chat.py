@@ -19,9 +19,10 @@ MODELS = {
         "headers": {"Content-Type": "application/json"},
     },
 }
+MODEL = os.getenv("MODEL", "qwen3:8b")
 
 
-def chat(message, model="qwen3:8b", system_prompt=DEFAULT_SYSTEM_PROMPT):
+def chat(message, model=MODEL, system_prompt=DEFAULT_SYSTEM_PROMPT):
     url = MODELS[model]["url"]
     headers = MODELS[model]["headers"]
     data = {

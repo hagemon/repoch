@@ -2,6 +2,7 @@ import requests
 from pyquery import PyQuery as pq
 import os
 import json
+from llm.chat import chat
 
 
 def fetch_and_parse_to_markdown(url):
@@ -115,7 +116,7 @@ def fetch_and_parse_to_markdown(url):
 
 def get_wiki(language, date):
     filtered_path = os.path.join("repos", date, "filtered")
-    wiki_path = os.path.join("repos", date, "wiki")
+    wiki_path = os.path.join("repos", date, "wiki", language)
     if not os.path.exists(wiki_path):
         os.makedirs(wiki_path)
     with open(
@@ -136,5 +137,27 @@ def get_wiki(language, date):
     return repos
 
 
-def summarize_wiki():
-    pass
+WIKI_SUMMARY_PROMPT = """
+你是一个播客内容总结助手，用户将提供一个github项目的介绍markdown，将其总结为播客中的一部分内容
+
+# 项目介绍
+{markdown}
+
+# 要求
+1. 依然用markdown形式返回，一级标题为项目名称
+2. 提炼关键内容，引起人们的兴趣，包括项目创新亮点、整体架构、技术细节等
+3. 返回markdown格式
+"""
+
+
+def summarize_wiki(language, date):
+    wiki_path = os.path.join("repos", date, "wiki", language)
+    summary_path = os.path.join("repos", date, "summary", language)
+    if not os.path.exists(summary_path):
+        os.makedirs(summary_path)
+    for file_name in os.listdir(wiki_path):
+        with open(os.path.join(wiki_path, file_name), "r", encoding="utf-8") as f:
+            markdown = f.read()
+        summary = chat(WIKI_SUMMARY_PROMPT.format(markdown=markdown))
+        with open(os.path.join(summary_path, file_name), "w", encoding="utf-8") as f:
+            f.write(summary)
