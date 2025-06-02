@@ -197,7 +197,7 @@ def get_readme(repo_name):
     return introduction
 
 
-def start_scrape(lans, date, overwrite=False):
+def start_scrape(language, date, overwrite=False):
     last_week = (
         datetime.datetime.strptime(date, "%Y-%m-%d") - datetime.timedelta(days=7)
     ).strftime("%Y-%m-%d")
@@ -205,21 +205,18 @@ def start_scrape(lans, date, overwrite=False):
     # 创建以日期命名的目录
     _, trending_directory, rookies_directory = create_date_directory(date)
 
-    for lan in tqdm(lans):
-        # 为每种语言创建单独的 Markdown 文件
-        # lang_filename = createMarkdown(strdate, lan, directory)
-        json_filename = createJson(lan, trending_directory)
-        if overwrite or not os.path.exists(json_filename):
-            scrape_trending(lan, json_filename)
-        else:
-            print(f"{json_filename} already exists")
+    json_filename = createJson(language, trending_directory)
+    if overwrite or not os.path.exists(json_filename):
+        scrape_trending(language, json_filename)
+    else:
+        print(f"{json_filename} already exists")
 
-        # 为新兴项目创建json文件
-        rookies_json_filename = createJson(lan, rookies_directory)
-        if overwrite or not os.path.exists(rookies_json_filename):
-            scrape_rookie_trending(lan, rookies_json_filename, last_week)
-        else:
-            print(f"{rookies_json_filename} already exists")
+    # 为新兴项目创建json文件
+    rookies_json_filename = createJson(language, rookies_directory)
+    if overwrite or not os.path.exists(rookies_json_filename):
+        scrape_rookie_trending(language, rookies_json_filename, last_week)
+    else:
+        print(f"{rookies_json_filename} already exists")
 
 
 if __name__ == "__main__":
