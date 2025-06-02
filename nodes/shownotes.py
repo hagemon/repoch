@@ -16,7 +16,7 @@ PROMPT = """
 
 
 def generate_shownotes(language, date, overwrite=False):
-    shownotes_path = os.path.join("repos", date, language, "shownotes")
+    shownotes_path = os.path.join("repos", date, "shownotes")
     trendings_path = os.path.join("repos", date, "trending", f"{language}.json")
     rookies_path = os.path.join("repos", date, "rookies", f"{language}.json")
     if not os.path.exists(shownotes_path):
@@ -29,11 +29,11 @@ def generate_shownotes(language, date, overwrite=False):
     with open(rookies_path, "r", encoding="utf-8") as f:
         rookies = json.load(f)
     projects = trendings + rookies
-    print(PROMPT.format(projects=json.dumps(projects, ensure_ascii=False, indent=4)))
-    # shownotes = chat(
-    #     PROMPT.format(projects=json.dumps(projects, ensure_ascii=False, indent=4))
-    # )
-    # with open(
-    #     os.path.join(shownotes_path, f"{language}.md"), "w", encoding="utf-8"
-    # ) as f:
-    #     f.write(shownotes)
+    # print(PROMPT.format(projects=json.dumps(projects, ensure_ascii=False, indent=4)))
+    shownotes = chat(
+        PROMPT.format(projects=json.dumps(projects, ensure_ascii=False, indent=4))
+    )
+    with open(
+        os.path.join(shownotes_path, f"{language}.md"), "w", encoding="utf-8"
+    ) as f:
+        f.write(shownotes)

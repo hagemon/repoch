@@ -22,9 +22,12 @@ OUTLINE_PROMPT = """我正在做一个每周开源资讯的播客，主要分为
 def create_outline(language, date, overwrite=False):
     trending_dir = os.path.join("repos", date, "trending")
     rookie_dir = os.path.join("repos", date, "rookies")
-    outline_file = os.path.join("repos", date, "outline", f"{language}.md")
-    if not overwrite and os.path.exists(outline_file):
+    outline_dir = os.path.join("repos", date, "outline")
+    if not os.path.exists(outline_dir):
+        os.makedirs(outline_dir)
+    if not overwrite and os.path.exists(os.path.join(outline_dir, f"{language}.md")):
         return
+    outline_file = os.path.join(outline_dir, f"{language}.md")
     with open(
         os.path.join(trending_dir, f"{language}.json"), "r", encoding="utf-8"
     ) as f:
