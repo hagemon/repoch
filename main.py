@@ -15,6 +15,7 @@ def main():
     # lans = ["all", "python", "swift", "typescript", "javascript", "go", "rust"]
     lans = ["all"]
     date = datetime.datetime.now().strftime("%Y-%m-%d")
+    overwrite = True
     # date = "2025-06-01"
 
     # Create main progress bar for languages
@@ -22,15 +23,18 @@ def main():
         for language in lang_pbar:
             # Define node tasks
             node_tasks = [
-                ("Scraping", lambda: start_scrape(language, date)),
-                ("Creating outline", lambda: create_outline(language, date)),
-                ("Filtering trending", lambda: filter_trending(language, date)),
-                ("Getting wiki", lambda: get_wiki(language, date)),
-                ("Summarizing wiki", lambda: summarize_wiki(language, date)),
-                ("Concluding", lambda: conclude(language, date)),
+                ("Scraping", lambda: start_scrape(language, date, overwrite)),
+                ("Creating outline", lambda: create_outline(language, date, overwrite)),
+                (
+                    "Filtering trending",
+                    lambda: filter_trending(language, date, overwrite),
+                ),
+                ("Getting wiki", lambda: get_wiki(language, date, overwrite)),
+                ("Summarizing wiki", lambda: summarize_wiki(language, date, overwrite)),
+                ("Concluding", lambda: conclude(language, date, overwrite)),
                 (
                     "Generating shownotes",
-                    lambda: generate_shownotes(language, date),
+                    lambda: generate_shownotes(language, date, overwrite),
                 ),
             ]
 
